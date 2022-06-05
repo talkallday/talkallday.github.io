@@ -6,4 +6,4 @@ group: index
 
 ### Examples
 
-- [Sound](/index.html)
+- [Sound](/sound.html)
