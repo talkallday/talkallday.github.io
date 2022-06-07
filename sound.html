@@ -6,6 +6,14 @@
 <button onclick="stop()">Stop</button>
 <script>
 
+  // Check if audio starts already unlocked by playing a blank wav.
+  let nothing = new Audio('http://touchbasicapp.com/nothing.wav')
+  nothing.play().then(function() {
+      lockeddiv.innerHTML = 'Audio started unlocked!'
+  }).catch(function(){
+      lockeddiv.innerHTML = 'Audio started locked :('
+  })
+
   let context = new AudioContext();
 
   function playSound(arr) {
@@ -23,7 +31,7 @@
       let sampleFreq = context.sampleRate / tone
       return Math.sin(sampleNumber / (sampleFreq / (Math.PI * 2)))
   }
- 
+
   let tapped = function() {
       messagediv.innerHTML = 'tapped'
 
@@ -54,13 +62,6 @@
     playdiv.removeEventListener('touchstart', tapped, false)
     playdiv.removeEventListener('click', tapped, false)
   }
-
-  // Check if audio starts already unlocked by playing a blank wav.
-  nothing.play().then(function() {
-    lockeddiv.innerHTML = 'Audio started unlocked!'
-  }).catch(function(){
-    lockeddiv.innerHTML = 'Audio started locked :('
-  })
 </script>
 </body>
 </html>
