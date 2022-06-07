@@ -8,13 +8,9 @@
 
   // Check if audio starts already unlocked by playing a blank wav.
   let nothing = new Audio('http://touchbasicapp.com/nothing.wav')
-  nothing.play().then(function() {
-      lockeddiv.innerHTML = 'Audio started unlocked!'
-  }).catch(function(){
-      lockeddiv.innerHTML = 'Audio started locked :('
-  })
-
   let context = new AudioContext();
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
 
   function playSound(arr) {
       let buf = new Float32Array(arr.length)
@@ -35,9 +31,6 @@
   let tapped = function() {
       messagediv.innerHTML = 'tapped'
 
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
-
       let ms = 1
       // We should be able to play music delayed now (even when it’s not during the tap event).
       messagediv.innerHTML = 'Music starts in' + ms + 'milliseconds…'
@@ -52,15 +45,22 @@
           arr[i] = sineWaveAt(i, tone) * volume
       }
 
-      playSound(arr)
+      playSound(arr);
   }
 
-  playdiv.addEventListener('touchstart', tapped, false)
-  playdiv.addEventListener('click', tapped, false)
-
   let stop = function() {
-    playdiv.removeEventListener('touchstart', tapped, false)
-    playdiv.removeEventListener('click', tapped, false)
+      playdiv.removeEventListener('touchstart', tapped, false)
+      playdiv.removeEventListener('click', tapped, false)
+  }
+
+  window.onload = function () {
+      nothing.play().then(function() {
+          lockeddiv.innerHTML = 'Audio started unlocked!'
+      }).catch(function(){
+          lockeddiv.innerHTML = 'Audio started locked :('
+      })
+      playdiv.addEventListener('touchstart', tapped, false)
+      playdiv.addEventListener('click', tapped, false)
   }
 </script>
 </body>
