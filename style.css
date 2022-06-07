@@ -1,0 +1,61 @@
+html {
+  font-size: 10px;
+  background-size: cover;
+}
+
+body,html {
+background-color: gray;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.keys {
+  display: flex;
+  flex: 1;
+  min-height: 1vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.key {
+  border: .2rem solid black;
+  border-radius: .25rem;
+  margin: 0.5rem;
+  font-size: .75rem;
+  padding: .5rem .25rem;
+  transition: all .07s ease;
+  width: 15rem;
+  text-align: center;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  text-shadow: 0 0 .5rem black;
+}
+
+.playing {
+  transform: scale(1.1);
+  border-color: #ffc600;
+  box-shadow: 0 0 1rem #ffc600;
+}
+
+.g {
+ background-color: blue;
+}
+
+.c {
+ background-color: pink;
+}
+
+.f {
+ background-color: green;
+}
+
+.ab {
+ background-color: yellow;
+}
+
+kbd {
+  display: block;
+  min-height: 5rem;
+  font-size: 2rem;
+}
