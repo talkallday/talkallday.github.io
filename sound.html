@@ -11,7 +11,7 @@
 <script>
   let currentFrequency = 0;
   let frequencies = new Set();
-  //let frequencySources = new Object();
+  let frequencySources = new Object();
   const noteValues = {
     'C0': 16.35,
     'C#0': 17.32,
@@ -161,7 +161,7 @@
     source.buffer = buffer;
     source.connect(context.destination);
     source.start(0);
-    //frequencySources[frequency] = source;
+    frequencySources[frequency] = source;
   }
 
   const sineWaveAt = (sampleNumber, tone) => {
