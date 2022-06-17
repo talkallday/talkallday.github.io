@@ -4,18 +4,10 @@ html {
 }
 
 body,html {
-background-color: gray;
+background-color: black;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-}
-
-.keys {
-  display: flex;
-  flex: 1;
-  min-height: 1vh;
-  align-items: center;
-  justify-content: center;
 }
 
 .key {
@@ -38,24 +30,25 @@ background-color: gray;
   box-shadow: 0 0 1rem #ffc600;
 }
 
-.g {
- background-color: blue;
-}
-
-.c {
- background-color: pink;
-}
-
-.f {
- background-color: green;
-}
-
-.ab {
- background-color: yellow;
-}
-
 kbd {
   display: block;
   min-height: 5rem;
   font-size: 2rem;
+  color: white;
 }
+
+.chord {
+  display: flex;
+  flex: 1;
+  min-height: 1vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.chord:nth-child(1) .key { background: red; }
+.chord:nth-child(2) .key { background: orange; }
+.chord:nth-child(3) .key { background: yellow; }
+.chord:nth-child(4) .key { background: green; }
+.chord:nth-child(5) .key { background: blue; }
+.chord:nth-child(6) .key { background: indigo; }
+.chord:nth-child(7) .key { background: violet; }

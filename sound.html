@@ -11,6 +11,7 @@
 <script>
   let currentFrequency = 0;
   let frequencies = new Set();
+  //let frequencySources = new Object();
   const noteValues = {
     'C0': 16.35,
     'C#0': 17.32,
@@ -61,7 +62,7 @@
     'Ab2': 103.83,
     'A2': 110.00,
     'A#2': 116.54,
-    'Bb2': 116.54,
+    'Bb2': 116.50,
     'B2': 123.47,
     'C3': 130.81,
     'C#3': 138.59,
@@ -78,7 +79,7 @@
     'Ab3': 207.65,
     'A3': 220.00,
     'A#3': 233.08,
-    'Bb3': 233.08,
+    'Bb3': 233.00,
     'B3': 246.94,
     'C4': 261.63,
     'C#4': 277.18,
@@ -95,7 +96,7 @@
     'Ab4': 415.30,
     'A4': 440.00,
     'A#4': 466.16,
-    'Bb4': 466.16,
+    'Bb4': 466.00,
     'B4': 493.88,
     'C5': 523.25,
     'C#5': 554.37,
@@ -112,7 +113,7 @@
     'Ab5': 830.61,
     'A5': 880.00,
     'A#5': 932.33,
-    'Bb5': 932.33,
+    'Bb5': 932.00,
     'B5': 987.77,
     'C6': 1046.50,
     'C#6': 1108.73,
@@ -149,9 +150,9 @@
     'Bb7': 3729.31,
     'B7': 3951.07,
     'C8': 4186.01
-  }
+  };
 
-  function playSound(arr) {
+  const playSound = (arr, frequency) => {
     let buf = new Float32Array(arr.length);
     for (let i = 0; i < arr.length; i++) buf[i] = arr[i];
     let buffer = context.createBuffer(1, buf.length, context.sampleRate);
@@ -160,17 +161,18 @@
     source.buffer = buffer;
     source.connect(context.destination);
     source.start(0);
+    //frequencySources[frequency] = source;
   }
 
-  function sineWaveAt(sampleNumber, tone) {
+  const sineWaveAt = (sampleNumber, tone) => {
       let sampleFreq = context.sampleRate / tone;
       return Math.sin(sampleNumber / (sampleFreq / (Math.PI * 2)))
   }
 
-  function playTone(frequency) {
+  const playTone = (frequency) => {
     let arr = [],
-          defVolume = 0.2,
-          seconds = 1.5
+            defVolume = 0.4,
+            seconds = 1.5
 
     if (frequencies.has(frequency)) return;
 
@@ -195,188 +197,256 @@
         arr[i] = sineWaveAt(i, frequency) * volume;
       }
 
-      playSound(arr);
+      playSound(arr, frequency);
       frequencies.delete(frequency);
       currentFrequency = 0;
   }
 
   const context = new AudioContext();
 
-  function playNote(e) {
-      e.target.classList.add('playing');
-      let noteName = e.target.innerHTML;
-      let frequency = noteValues[noteName];
-      if (!frequency) return;
-      playTone(frequency);
+  const playNote = (e) => {
+    e.target.classList.add('playing');
+    let noteName = e.target.innerHTML;
+    let frequency = noteValues[noteName];
+    if (!frequency) return;
+    playTone(frequency);
   }
 
-  function stopSound(e) {
-      e.target.classList.remove('playing');
+  const stopSound = (e) => {
+    e.target.classList.remove('playing');
+    let noteName = e.target.innerHTML;
+    let frequency = noteValues[noteName];
+    if (!frequency) return;
+    /*
+    let source = frequencySources[frequency];
+    source.stop();
+    // Create a gain node and set it's gain value to 0.5
+    let gainNode = context.createGain();
+
+    // connect the AudioBufferSourceNode to the gainNode
+    // and the gainNode to the destination
+    gainNode.gain.setValueAtTime(0, context.currentTime);
+    source.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 2);
+
+     */
   }
 
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  window.onload = function () {
-
-      const keys = Array.from(document.querySelectorAll('.key'));
-      keys.forEach(key => key.addEventListener('pointerdown', playNote));
-      keys.forEach(key => key.addEventListener('pointerup', stopSound));
+  window.onload = () => {
+    const keys = Array.from(document.querySelectorAll('.key'));
+    keys.forEach(key => key.addEventListener('pointerdown', playNote));
+    keys.forEach(key => key.addEventListener('pointerup', stopSound));
   }
 </script>
-  <div class="keys">
-    <div class="key g">
-      <kbd>G2</kbd>
+  <div class="board">
+    <div class="chord">
+      <div class="key">
+        <kbd>Bb2</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>G3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>G4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>G5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb6</kbd>
+      </div>
+      <div class="key">
+        <kbd>G6</kbd>
+      </div>
     </div>
-    <div class="key g">
-      <kbd>Bb2</kbd>
-    </div>
-    <div class="key g">
-      <kbd>D3</kbd>
-    </div>
-    <div class="key g">
-      <kbd>G3</kbd>
-    </div>
-    <div class="key g">
-      <kbd>Bb3</kbd>
-    </div>
-    <div class="key g">
-      <kbd>D4</kbd>
-    </div>
-    <div class="key g">
-      <kbd>G4</kbd>
-    </div>
-    <div class="key g">
-      <kbd>Bb4</kbd>
-    </div>
-    <div class="key g">
-      <kbd>D5</kbd>
-    </div>
-    <div class="key g">
-      <kbd>G5</kbd>
-    </div>
-    <div class="key g">
-      <kbd>Bb5</kbd>
-    </div>
-    <div class="key g">
-      <kbd>D6</kbd>
-    </div>
-  </div>
 
-  <div class="keys">
-    <div class="key c">
-      <kbd>G2</kbd>
+    <div class="chord">
+      <div class="key">
+        <kbd>Bb2</kbd>
+      </div>
+      <div class="key Cm7">
+        <kbd>C3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>G3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>C4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>G4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>C5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>G5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>C6</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb6</kbd>
+      </div>
     </div>
-    <div class="key c">
-      <kbd>C3</kbd>
-    </div>
-    <div class="key c">
-      <kbd>Eb3</kbd>
-    </div>
-    <div class="key c">
-      <kbd>G3</kbd>
-    </div>
-    <div class="key c">
-      <kbd>C4</kbd>
-    </div>
-    <div class="key c">
-      <kbd>Eb4</kbd>
-    </div>
-    <div class="key c">
-      <kbd>G4</kbd>
-    </div>
-    <div class="key c">
-      <kbd>C5</kbd>
-    </div>
-    <div class="key c">
-      <kbd>Eb5</kbd>
-    </div>
-    <div class="key c">
-      <kbd>G5</kbd>
-    </div>
-    <div class="key c">
-      <kbd>C6</kbd>
-    </div>
-    <div class="key c">
-      <kbd>Eb6</kbd>
-    </div>
-  </div>
 
-  <div class="keys">
-    <div class="key f">
-      <kbd>Ab2</kbd>
+    <div class="chord">
+      <div class="key">
+        <kbd>G2</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb2</kbd>
+      </div>
+      <div class="key">
+        <kbd>D3</kbd>
+      </div>
+      <div class="key">
+        <kbd>G3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>D4</kbd>
+      </div>
+      <div class="key">
+        <kbd>G4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>D5</kbd>
+      </div>
+      <div class="key">
+        <kbd>G5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Bb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>D6</kbd>
+      </div>
     </div>
-    <div class="key f">
-      <kbd>C3</kbd>
-    </div>
-    <div class="key f">
-      <kbd>F3</kbd>
-    </div>
-    <div class="key f">
-      <kbd>Ab3</kbd>
-    </div>
-    <div class="key f">
-      <kbd>C4</kbd>
-    </div>
-    <div class="key f">
-      <kbd>F4</kbd>
-    </div>
-    <div class="key f">
-      <kbd>Ab4</kbd>
-    </div>
-    <div class="key f">
-      <kbd>C5</kbd>
-    </div>
-    <div class="key f">
-      <kbd>F5</kbd>
-    </div>
-    <div class="key f">
-      <kbd>Ab5</kbd>
-    </div>
-    <div class="key f">
-      <kbd>C6</kbd>
-    </div>
-    <div class="key f">
-      <kbd>F6</kbd>
-    </div>
-  </div>
 
-   <div class="keys">
-     <div class="key ab">
-       <kbd>Ab2</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>C3</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>F3</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>Ab3</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>C4</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>F4</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>Ab4</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>C5</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>F5</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>Ab5</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>C6</kbd>
-     </div>
-     <div class="key ab">
-       <kbd>F6</kbd>
-     </div>
+    <div class="chord">
+      <div class="key">
+        <kbd>F2</kbd>
+      </div>
+      <div class="key">
+        <kbd>Ab2</kbd>
+      </div>
+      <div class="key">
+        <kbd>C3</kbd>
+      </div>
+      <div class="key">
+        <kbd>F3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Ab3</kbd>
+      </div>
+      <div class="key">
+        <kbd>C4</kbd>
+      </div>
+      <div class="key">
+        <kbd>F4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Ab4</kbd>
+      </div>
+      <div class="key">
+        <kbd>C5</kbd>
+      </div>
+      <div class="key">
+        <kbd>F5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Ab5</kbd>
+      </div>
+      <div class="key">
+        <kbd>C6</kbd>
+      </div>
+      <div class="key">
+        <kbd>F6</kbd>
+      </div>
+    </div>
+
+
+    <div class="chord">
+      <div class="key Cm7">
+        <kbd>C3</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb3</kbd>
+      </div>
+      <div class="key">
+        <kbd>G3</kbd>
+      </div>
+      <div class="key">
+        <kbd>C4</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb4</kbd>
+      </div>
+      <div class="key">
+        <kbd>G4</kbd>
+      </div>
+      <div class="key">
+        <kbd>C5</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb5</kbd>
+      </div>
+      <div class="key">
+        <kbd>G5</kbd>
+      </div>
+      <div class="key">
+        <kbd>C6</kbd>
+      </div>
+      <div class="key">
+        <kbd>Eb6</kbd>
+      </div>
+    </div>
   </div>
 </body>
 </html>
