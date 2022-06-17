@@ -11,7 +11,6 @@
 <script>
   let currentFrequency = 0;
   let frequencies = new Set();
-  //let frequencySources = new Object();
   const noteValues = {
     'C0': 16.35,
     'C#0': 17.32,
@@ -161,7 +160,6 @@
     source.buffer = buffer;
     source.connect(context.destination);
     source.start(0);
-    //frequencySources[frequency] = source;
   }
 
   const sineWaveAt = (sampleNumber, tone) => {
@@ -217,21 +215,6 @@
     let noteName = e.target.innerHTML;
     let frequency = noteValues[noteName];
     if (!frequency) return;
-    /*
-    let source = frequencySources[frequency];
-    source.stop();
-    // Create a gain node and set it's gain value to 0.5
-    let gainNode = context.createGain();
-
-    // connect the AudioBufferSourceNode to the gainNode
-    // and the gainNode to the destination
-    gainNode.gain.setValueAtTime(0, context.currentTime);
-    source.connect(gainNode);
-    gainNode.connect(context.destination);
-
-    gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 2);
-
-     */
   }
 
 
