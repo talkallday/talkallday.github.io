@@ -154,7 +154,7 @@
     'C8': 4186.01
   };
 
-  const playSound = (arr, frequency) => {
+  const playSound = (arr) => {
     let buf = new Float32Array(arr.length);
     for (let i = 0; i < arr.length; i++) buf[i] = arr[i];
     let buffer = context.createBuffer(1, buf.length, context.sampleRate);
@@ -198,7 +198,7 @@
         arr[i] = sineWaveAt(i, frequency) * volume;
       }
 
-      playSound(arr, frequency);
+      playSound(arr);
       frequencies.delete(frequency);
   }
 
@@ -225,7 +225,7 @@
     const playColor = Array.from(document.querySelectorAll('.play-color'))[0];
     const currentColor = colorNames[style.backgroundColor];
     playColor.style.backgroundColor = currentColor;
-    playColor.innerHTML = `<kbd>Playing: ` + currentColor + `</kbd>`;
+    playColor.innerHTML = `Playing: ` + currentColor;
     let noteName = key.textContent.replace(/\s/g, '');
     playNoteName(noteName);
   }
