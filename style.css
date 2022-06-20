@@ -10,6 +10,21 @@ background-color: black;
   font-family: sans-serif;
 }
 
+.base-key {
+  border: .2rem solid black;
+  border-radius: .25rem;
+  margin: 0.5rem;
+  font-size: .75rem;
+  padding: .5rem .25rem;
+  transition: all .07s ease;
+  width: 15rem;
+  text-align: center;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  text-shadow: 0 0 .5rem black;
+}
+
+
 .key {
   border: .2rem solid black;
   border-radius: .25rem;
