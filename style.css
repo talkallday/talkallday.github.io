@@ -39,6 +39,26 @@ background-color: black;
   text-shadow: 0 0 .5rem black;
 }
 
+.self-play {
+  border: .2rem solid indigo;
+  padding: .5rem .25rem;
+  min-height: 5rem;
+  font-size: 2rem;
+  background: indigo;
+  color: black;
+  display: inline-block;
+}
+
+.play-status {
+  border: .2rem solid white;
+  padding: .5rem .25rem;
+  min-height: 5rem;
+  font-size: 2rem;
+  background: violet;
+  color: white;
+  display: inline-block
+}
+
 .playing {
   transform: scale(1.1);
   border-color: #ffc600;

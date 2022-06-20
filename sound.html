@@ -11,7 +11,7 @@
 <script>
   let frequencies = new Set();
   const measure = 2.5;
-  const loopTimes = 8;
+  const loopTimes = 4;
   const mms = measure * 1000;
   const noteDuration = .25 * mms;
   const noteValues = {
@@ -280,9 +280,17 @@
     play4RandomNotes(fifthChord);
   }
 
+  const updatePlayStatus = (newTime) => {
+    const playStatusDiv = Array.from(document.querySelectorAll('.play-status'))[0];
+    console.log(newTime);
+    console.log(playStatusDiv);
+    playStatusDiv.innerHTML = `<kbd>Status: ` + newTime + ` Times Through</kb>`;
+  }
+
   const loopSelfPlay = async () => {
     const ms = measure * 8 * 1000;
     for (let i = 0; i < loopTimes; i++) {
+      updatePlayStatus(i);
       selfPlay();
       await new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -293,12 +301,12 @@
     const keys = Array.from(document.querySelectorAll('.key'));
     keys.forEach(key => key.addEventListener('pointerdown', playNote));
     keys.forEach(key => key.addEventListener('pointerup', stopSound));
-    const selfPlayButton = Array.from(document.querySelectorAll('.self-play'));
-    selfPlayButton.forEach(key => key.addEventListener('pointerdown', loopSelfPlay));
+    const selfPlayButton = Array.from(document.querySelectorAll('.self-play'))[0];
+    selfPlayButton.innerHTML = `<kbd>Press here to play ` + loopTimes + ` Times</kbd>`;
+    selfPlayButton.addEventListener('pointerdown', loopSelfPlay);
   }
 
 </script>
-  <div class="self-play"><kbd>Play 8 Times</kbd></div>
   <div class="board">
     <div class="chord">
       <div class="key">
@@ -505,5 +513,9 @@
       </div>
     </div>
   </div>
+<div>
+  <div class="self-play inline-block"></div>
+  <div class="play-status inline-block"><kbd>Status: 0 Times Through</kbd></div>
+</div>
 </body>
 </html>
