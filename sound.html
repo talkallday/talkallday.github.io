@@ -13,6 +13,8 @@
   const measure = 2.5;
   const loopTimes = 4;
   const mms = measure * 1000;
+  const defMaxVolume = 0.4;
+  const autoVolume = defMaxVolume * 0.75;
   const noteDuration = .25 * mms;
   const noteValues = {
     'C0': 16.35,
@@ -170,30 +172,28 @@
       return Math.sin(sampleNumber / (sampleFreq / (Math.PI * 2)))
   }
 
-  const playTone = (frequency) => {
+  const playTone = (frequency, maxVolume) => {
     if (frequencies.has(frequency)) return;
 
     frequencies.add(frequency)
 
     let arr = [],
-            defVolume = 0.4,
-            seconds = measure * .249
-
-    let srs = context.sampleRate * seconds;
-    let earlyCut = srs * 0.1;
-    let lateCut = srs * 0.9;
+        seconds = measure * .249,
+        srs = context.sampleRate * seconds,
+        earlyCut = srs * 0.1,
+        lateCut = srs * 0.9
 
       for (let i = 0; i < srs; i++) {
-        let volume = defVolume;
+        let volume = maxVolume;
         if (i < earlyCut) {
           volume *= (i / earlyCut);
         } else if (i > lateCut) {
           volume *= ((srs - i) / earlyCut);
         } else {
-          volume = defVolume;
+          volume = maxVolume;
         }
-        if (volume > defVolume) {
-          volume = defVolume;
+        if (volume > maxVolume) {
+          volume = maxVolume;
         }
         arr[i] = sineWaveAt(i, frequency) * volume;
       }
@@ -204,11 +204,10 @@
 
   const context = new AudioContext();
 
-  const playNoteName = (noteName) => {
+  const playNoteName = (noteName, maxVolume) => {
     let frequency = noteValues[noteName];
     if (!frequency) return;
-    console.log('playing note ' + noteName);
-    playTone(frequency);
+    playTone(frequency, maxVolume);
   }
 
   const colorNames = {
@@ -227,7 +226,7 @@
     playColor.style.backgroundColor = currentColor;
     playColor.innerHTML = `Playing: ` + currentColor;
     let noteName = key.textContent.replace(/\s/g, '');
-    playNoteName(noteName);
+    playNoteName(noteName, autoVolume);
   }
 
   const stopElement = (key) => {
@@ -237,7 +236,7 @@
   const playNote = (e) => {
     e.target.classList.add('playing');
     let noteName = e.target.innerHTML;
-    playNoteName(noteName);
+    playNoteName(noteName, defMaxVolume);
   }
 
   const stopSound = (e) => {
@@ -260,12 +259,14 @@
   }
 
   const playRandomNotes = async (chord) => {
+    chord.style.backgroundColor = 'gray';
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
+    chord.style.backgroundColor = 'black';
   }
 
   const selfPlay = async () => {
