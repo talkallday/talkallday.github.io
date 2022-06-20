@@ -226,7 +226,7 @@
     const playColor = Array.from(document.querySelectorAll('.play-color'))[0];
     const currentColor = colorNames[style.backgroundColor];
     playColor.style.backgroundColor = currentColor;
-    playColor.innerHTML = `Playing: ` + currentColor;
+    playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
     let noteName = key.textContent.replace(/\s/g, '');
     playNoteName(noteName, autoVolume);
   }
@@ -330,7 +330,7 @@
     playColor.innerHTML = 'Not Playing';
 
     const stopButton = Array.from(document.querySelectorAll('.stop-button'))[0];
-    stopButton.innerHTML = 'Press to stop';
+    stopButton.innerHTML = 'Press To Stop';
     stopButton.addEventListener('pointerdown', stopLoop);
   }
 

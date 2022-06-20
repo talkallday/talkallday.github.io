@@ -37,6 +37,11 @@ background-color: black;
   background: black;
 }
 
+.stop-button {
+  background: white;
+  color: black;
+}
+
 .playing {
   transform: scale(1.1);
   border-color: #ffc600;
