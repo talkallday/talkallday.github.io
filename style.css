@@ -10,51 +10,31 @@ background-color: black;
   font-family: sans-serif;
 }
 
-.base-key {
-  border: .2rem solid black;
-  border-radius: .25rem;
-  margin: 0.5rem;
-  font-size: .75rem;
-  padding: .5rem .25rem;
-  transition: all .07s ease;
-  width: 15rem;
-  text-align: center;
-  color: white;
-  background: rgba(0,0,0,0.4);
-  text-shadow: 0 0 .5rem black;
-}
-
 .pressable {
   border: .2rem solid black;
   border-radius: .25rem;
   margin: 0.5rem;
-  font-size: .75rem;
   padding: .5rem .25rem;
   transition: all .07s ease;
   width: 15rem;
   text-align: center;
-  color: white;
-  background: rgba(0,0,0,0.4);
   text-shadow: 0 0 .5rem black;
   display: inline-block;
+  min-height: 5rem;
+  font-size: 2rem;
+  color: white;
 }
 
 .self-play {
-  border: .2rem solid indigo;
   background: indigo;
-  color: black;
 }
 
 .play-status {
-  border: .2rem solid white;
   background: violet;
-  color: white;
 }
 
 .play-color {
-  border: .2rem solid white;
   background: black;
-  color: white;
 }
 
 .playing {
@@ -67,7 +47,6 @@ kbd {
   display: block;
   min-height: 5rem;
   font-size: 2rem;
-  color: white;
 }
 
 .chord {
