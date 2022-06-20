@@ -10,6 +10,8 @@
 
 <script>
   let frequencies = new Set();
+  let playing = false;
+  let stopped = true;
   const measure = 2.5;
   const loopTimes = 4;
   const mms = measure * 1000;
@@ -270,6 +272,8 @@
   }
 
   const selfPlay = async () => {
+    if (playing) {return}
+    playing = true;
     const board = document.querySelectorAll('.board')[0];
     const chords = [...board.children];
     const firstChord = chords[0];
@@ -277,21 +281,19 @@
     const thirdChord = chords[2];
     const fourthChord = chords[3];
     const fifthChord = chords[4];
-    playRandomNotes(firstChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(secondChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(thirdChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(thirdChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(fourthChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(fourthChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(fifthChord);
-    await new Promise(resolve => setTimeout(resolve, mms));
-    playRandomNotes(fifthChord);
+    !stopped && playRandomNotes(firstChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(secondChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(thirdChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(thirdChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(fourthChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(fourthChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(fifthChord) && await new Promise(resolve => setTimeout(resolve, mms));
+    !stopped && playRandomNotes(fifthChord);
+    playing = false;
+  }
+
+  const stopLoop = () => {
+    stopped = true;
   }
 
   const updatePlayStatus = (newTime) => {
@@ -300,12 +302,15 @@
   }
 
   const loopSelfPlay = async () => {
-    const ms = measure * 8 * 1000;
+    stopped = false;
+    const ms = 8 * mms;
     for (let i = 0; i < loopTimes; i++) {
       updatePlayStatus(i);
       selfPlay();
       await new Promise(resolve => setTimeout(resolve, ms));
+      if (stopped) { break; }
     }
+    stopped = true;
   }
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -323,6 +328,10 @@
 
     const playColor = Array.from(document.querySelectorAll('.play-color'))[0];
     playColor.innerHTML = 'Not Playing';
+
+    const stopButton = Array.from(document.querySelectorAll('.stop-button'))[0];
+    stopButton.innerHTML = 'Press to stop';
+    stopButton.addEventListener('pointerdown', stopLoop);
   }
 
 </script>
@@ -534,8 +543,9 @@
   </div>
 <div class="chord">
   <div class="pressable self-play"></div>
-  <div class="pressable play-status">not playing</div>
-  <div class="pressable play-color">not playing</div>
+  <div class="pressable play-status"></div>
+  <div class="pressable play-color"></div>
+  <div class="pressable stop-button"></div>
 </div>
 </body>
 </html>
