@@ -24,8 +24,7 @@ background-color: black;
   text-shadow: 0 0 .5rem black;
 }
 
-
-.key {
+.pressable {
   border: .2rem solid black;
   border-radius: .25rem;
   margin: 0.5rem;
@@ -37,26 +36,25 @@ background-color: black;
   color: white;
   background: rgba(0,0,0,0.4);
   text-shadow: 0 0 .5rem black;
+  display: inline-block;
 }
 
 .self-play {
   border: .2rem solid indigo;
-  padding: .5rem .25rem;
-  min-height: 5rem;
-  font-size: 2rem;
   background: indigo;
   color: black;
-  display: inline-block;
 }
 
 .play-status {
   border: .2rem solid white;
-  padding: .5rem .25rem;
-  min-height: 5rem;
-  font-size: 2rem;
   background: violet;
   color: white;
-  display: inline-block
+}
+
+.play-color {
+  border: .2rem solid white;
+  background: black;
+  color: white;
 }
 
 .playing {

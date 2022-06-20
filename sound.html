@@ -211,8 +211,20 @@
     playTone(frequency);
   }
 
+  const colorNames = {
+    'rgb(255, 0, 0)': 'red',
+    'rgb(255, 165, 0)': 'orange',
+    'rgb(255, 255, 0)': 'yellow',
+    'rgb(0, 128, 0)': 'green',
+    'rgb(0, 0, 255)': 'blue',
+  }
+
   const playElement = (key) => {
     key.classList.add('playing');
+    let style = getComputedStyle(key);
+    const playColor = Array.from(document.querySelectorAll('.play-color'))[0];
+    const currentColor = colorNames[style.backgroundColor];
+    playColor.innerHTML = `<kbd style="background: ` + currentColor  + `">Current Color: ` + currentColor;
     let noteName = key.textContent.replace(/\s/g, '');
     playNoteName(noteName);
   }
@@ -246,7 +258,7 @@
     )
   }
 
-  const play4RandomNotes = async (chord) => {
+  const playRandomNotes = async (chord) => {
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
     playRandomNote(chord);
@@ -263,27 +275,25 @@
     const thirdChord = chords[2];
     const fourthChord = chords[3];
     const fifthChord = chords[4];
-    play4RandomNotes(firstChord);
+    playRandomNotes(firstChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(secondChord);
+    playRandomNotes(secondChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(thirdChord);
+    playRandomNotes(thirdChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(thirdChord);
+    playRandomNotes(thirdChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(fourthChord);
+    playRandomNotes(fourthChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(fourthChord);
+    playRandomNotes(fourthChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(fifthChord);
+    playRandomNotes(fifthChord);
     await new Promise(resolve => setTimeout(resolve, mms));
-    play4RandomNotes(fifthChord);
+    playRandomNotes(fifthChord);
   }
 
   const updatePlayStatus = (newTime) => {
     const playStatusDiv = Array.from(document.querySelectorAll('.play-status'))[0];
-    console.log(newTime);
-    console.log(playStatusDiv);
     playStatusDiv.innerHTML = `<kbd>Status: ` + newTime + ` Times Through</kb>`;
   }
 
@@ -309,213 +319,214 @@
 </script>
   <div class="board">
     <div class="chord">
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb2</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb6</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G6</kbd>
       </div>
     </div>
 
     <div class="chord">
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb2</kbd>
       </div>
-      <div class="key Cm7">
+      <div class="pressable key">
         <kbd>C3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C6</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb6</kbd>
       </div>
     </div>
 
     <div class="chord">
-      <div class="key">
+      <div class="pressable key">
         <kbd>G2</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb2</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>D3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>D4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>D5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Bb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>D6</kbd>
       </div>
     </div>
 
     <div class="chord">
-      <div class="key">
+      <div class="pressable key">
         <kbd>F2</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Ab2</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>F3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Ab3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>F4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Ab4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>F5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Ab5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C6</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>F6</kbd>
       </div>
     </div>
 
 
     <div class="chord">
-      <div class="key Cm7">
+      <div class="pressable key">
         <kbd>C3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G3</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G4</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>G5</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>C6</kbd>
       </div>
-      <div class="key">
+      <div class="pressable key">
         <kbd>Eb6</kbd>
       </div>
     </div>
   </div>
 <div>
-  <div class="self-play inline-block"></div>
-  <div class="play-status inline-block"><kbd>Status: 0 Times Through</kbd></div>
+  <div class="pressable self-play"></div>
+  <div class="pressable play-status"><kbd>not playing</kbd></div>
+  <div class="pressable play-color"><kbd>not playing</kbd></div>
 </div>
 </body>
 </html>
