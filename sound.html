@@ -8,12 +8,12 @@
 
 <body>
 
-<script src="default.js"></script>
+<script type="module" src="default.js"></script>
 
 <div class="modal">
   <div class="modal-content">
     <span class="close-button">×</span>
-    <form id="loop-form" onsubmit="submitTimes(); return false">
+    <form id="loop-form">
       <label for="loops-select">Select how many times to loop:</label>
       <select name="loops" id="loops-select">
         <option value="1">1</option>
@@ -33,224 +33,224 @@
         <option value="15">15</option>
         <option value="16">16</option>
       </select>
-      <button>submit</button>
+      <button type="button" id="set-loops">change</button>
     </form>
   </div>
 </div>
 
-<div class="board">
+<div class="board" id="sound-board">
   <div class="chord">
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb6</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G6</kbd>
     </div>
   </div>
 
   <div class="chord">
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C6</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb6</kbd>
     </div>
   </div>
 
   <div class="chord">
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>D3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>D4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>D5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Bb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>D6</kbd>
     </div>
   </div>
 
   <div class="chord">
-    <div class="pressable key">
+    <div class="press key">
       <kbd>F2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Ab2</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>F3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Ab3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>F4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Ab4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>F5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Ab5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C6</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>F6</kbd>
     </div>
   </div>
 
 
   <div class="chord">
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G3</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G4</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>G5</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>C6</kbd>
     </div>
-    <div class="pressable key">
+    <div class="press key">
       <kbd>Eb6</kbd>
     </div>
   </div>
 </div>
 
 <div class="chord">
-  <div class="pressable play"></div>
-  <div class="pressable play-status"></div>
-  <div class="pressable play-color"></div>
-  <div class="pressable stop-button"></div>
-  <div class="set-loops pressable">Change Loop Times</div>
+  <div class="press" id="play"></div>
+  <div class="press" id="play-status"></div>
+  <div class="press" id="play-color"></div>
+  <div class="press" id="stop-button"></div>
+  <div class="press" id="modal-loops">Change Loop Times</div>
 </div>
 
 </body>
