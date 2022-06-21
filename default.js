@@ -130,36 +130,44 @@ const submitTimes = (event) => {
 const modal = () => {
   const timesForm = document.createElement('form');
   timesForm.setAttribute('id', 'loop-form');
-  timesForm.innerHTML = `
-    <span class="close-button">×</span>
-    <label for="loops-select">Select how many times to loop:</label>
-    <select name="loops" id="loops-select">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4" selected>4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-    </select>
-    <button type="button" id="set-loops">change</button>
-  `
+
+  const closeButton = document.createElement('span');
+  closeButton.classList.add('close-button');
+  closeButton.textContent = `x`;
+  closeButton.addEventListener("click", toggleModal);
+  timesForm.appendChild(closeButton);
+
+  const loopLabel = document.createElement('label');
+  loopLabel.setAttribute('for', 'loops-select');
+  loopLabel.textContent = `select how many times to loop: `;
+  timesForm.appendChild(loopLabel);
+
+  const loopSelect = document.createElement('select');
+  loopSelect.setAttribute('id', 'loops-select');
+  loopSelect.setAttribute('name', 'loops');
+  for (let v = 0; v < 16; v++) {
+    let optionValue = v + 1;
+    let loopOption = document.createElement('option');
+    loopOption.textContent = optionValue.toString();
+    loopOption.value = optionValue.toString();
+    loopSelect.appendChild(loopOption);
+  }
+  timesForm.appendChild(loopSelect);
+
+  const loopButton = document.createElement('button');
+  loopButton.setAttribute('type', 'button');
+  loopButton.setAttribute('id', 'set-loops');
+  loopButton.textContent = `change`;
+  timesForm.appendChild(loopButton);
+
   const modalContentDiv = document.createElement('div');
   modalContentDiv.classList.add('modal-content');
+
+  modalContentDiv.appendChild(timesForm)
 
   const modalDiv = document.createElement('div');
   modalDiv.classList.add('modal');
 
-  modalContentDiv.appendChild(timesForm)
   modalDiv.appendChild(modalContentDiv)
 
   return modalDiv;
@@ -184,6 +192,7 @@ const createBoard = (chords) => {
     chordNotes.forEach((note) => {
       const noteDiv = document.createElement('div');
       noteDiv.classList.add('press', 'key');
+      noteDiv.addEventListener('pointerdown', playNoteEvent)
       const kbd = document.createElement('kbd');
       kbd.textContent = note;
       noteDiv.appendChild(kbd);
@@ -241,10 +250,6 @@ export const setUpApp = () => {
   app.appendChild(createBoard(boardChords))
   app.appendChild(bottomBoard());
 
-  // set up soundboard
-  const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('pointerdown', playNoteEvent));
-
   // set default number of times and refresh play status
   setTimes(loopTimes);
   updatePlayStatus(0);
@@ -252,5 +257,4 @@ export const setUpApp = () => {
   document.getElementById("set-loops").addEventListener("click", submitTimes);
 
   const closeButton = document.querySelector(".close-button");
-  closeButton.addEventListener("click", toggleModal);
 }
