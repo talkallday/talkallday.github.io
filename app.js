@@ -1,9 +1,4 @@
-import { setUpSoundboard } from './default'
-
-const setUpApp = () => {
-  const app = document.getElementById('app');
-  app.innerHTML = 'oh hello';
-}
+import { setUpApp } from "./default.js";
 
 window.onload = () => {
   setUpApp();
