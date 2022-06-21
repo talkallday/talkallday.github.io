@@ -225,7 +225,7 @@ const stopElement = (key) => {
 
 const playNote = (e) => {
   e.target.classList.add('playing');
-  let noteName = e.target.innerHTML;
+  let noteName = e.target.textContent.replace(/\s/g, '');
   playNoteName(noteName, defMaxVolume);
   setTimeout(() => {
       stopElement(e.target);
