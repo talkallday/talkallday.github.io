@@ -1,6 +1,7 @@
 const context = new AudioContext();
 
 export const measure = 2.5;
+export const measureSubdivisions = 4;
 
 let frequencies = new Set();
 
@@ -26,7 +27,7 @@ const playTone = (frequency, maxVolume) => {
   frequencies.add(frequency)
 
   let arr = [],
-    seconds = measure * .249,
+    seconds = measure * (1 / measureSubdivisions) - .001,
     srs = context.sampleRate * seconds,
     earlyCut = srs * 0.1,
     lateCut = srs * 0.9

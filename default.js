@@ -1,13 +1,13 @@
 // frequencies currently playing
-import { playNoteName, measure, getNotes } from './utils.js';
+import { playNoteName, measure, getNotes, measureSubdivisions } from './utils.js';
 
 let playing = false;
 let stopped = true;
 let loopTimes = 4;
-const mms = measure * 1000;
+const msPerMeasure = measure * 1000;
 const defMaxVolume = 0.4;
 const autoVolume = defMaxVolume * 0.5;
-const noteDuration = .25 * mms;
+const noteDuration = (1 / measureSubdivisions) * msPerMeasure;
 const colorNames = {
   'rgb(255, 0, 0)': 'red',
   'rgb(255, 165, 0)': 'orange',
@@ -57,7 +57,7 @@ const playRandomNote = (chord) => {
 
 const playRandomNotes = async (chord) => {
   chord.style.backgroundColor = 'gray';
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < measureSubdivisions; i++) {
     if (stopped) {break;}
     playRandomNote(chord);
     playRandomNote(chord);
@@ -98,7 +98,6 @@ const updatePlayStatus = (newTime) => {
 
 const loopPlay = async () => {
   stopped = false;
-  const ms = 8 * mms;
   for (let i = 0; i < loopTimes; i++) {
     updatePlayStatus(i);
     await play();
@@ -127,21 +126,22 @@ const submitTimes = (event) => {
   toggleModal();
 }
 
-const modal = () => {
-  const timesForm = document.createElement('form');
-  timesForm.setAttribute('id', 'loop-form');
-
+const getCloseButton = () => {
   const closeButton = document.createElement('span');
   closeButton.classList.add('close-button');
   closeButton.textContent = `x`;
   closeButton.addEventListener("click", toggleModal);
-  timesForm.appendChild(closeButton);
+  return closeButton;
+}
 
+const getLoopLabel = () => {
   const loopLabel = document.createElement('label');
   loopLabel.setAttribute('for', 'loops-select');
   loopLabel.textContent = `select how many times to loop: `;
-  timesForm.appendChild(loopLabel);
+  return loopLabel;
+}
 
+const getLoopSelect = () => {
   const loopSelect = document.createElement('select');
   loopSelect.setAttribute('id', 'loops-select');
   loopSelect.setAttribute('name', 'loops');
@@ -152,18 +152,34 @@ const modal = () => {
     loopOption.value = optionValue.toString();
     loopSelect.appendChild(loopOption);
   }
-  timesForm.appendChild(loopSelect);
+  return loopSelect;
+}
 
+const getLoopButton = () => {
   const loopButton = document.createElement('button');
   loopButton.setAttribute('type', 'button');
   loopButton.setAttribute('id', 'set-loops');
+  loopButton.addEventListener("click", submitTimes);
   loopButton.textContent = `change`;
-  timesForm.appendChild(loopButton);
+  return loopButton;
+}
+
+const getTimesForm = () => {
+  const timesForm = document.createElement('form');
+  timesForm.setAttribute('id', 'loop-form');
+  timesForm.appendChild(getCloseButton());
+  timesForm.appendChild(getLoopLabel());
+  timesForm.appendChild(getLoopSelect());
+  timesForm.appendChild(getLoopButton());
+  return timesForm;
+}
+
+const modal = () => {
 
   const modalContentDiv = document.createElement('div');
   modalContentDiv.classList.add('modal-content');
 
-  modalContentDiv.appendChild(timesForm)
+  modalContentDiv.appendChild(getTimesForm())
 
   const modalDiv = document.createElement('div');
   modalDiv.classList.add('modal');
@@ -172,14 +188,6 @@ const modal = () => {
 
   return modalDiv;
 }
-
-const boardChords = [
-  ['Eb', 'G', 'Bb'], // Eb
-  ['C', 'Eb', 'G', 'Bb'], // Cm7
-  ['G', 'Bb', 'D'], // Gm
-  ['F', 'Ab', 'C'], // Fm
-  ['C', 'Eb', 'G'], // Cm
-];
 
 const createBoard = (chords) => {
   const board = document.createElement('div');
@@ -211,6 +219,7 @@ const bottomBoard = () => {
   const playButton = document.createElement('div');
   playButton.classList.add('press');
   playButton.setAttribute('id', 'play');
+  playButton.innerHTML = `Press To Play ` + loopTimes + ` Times`;
   playButton.addEventListener('pointerdown', loopPlay);
   boardDiv.appendChild(playButton);
 
@@ -218,6 +227,7 @@ const bottomBoard = () => {
   const playStatus = document.createElement('div');
   playStatus.classList.add('press');
   playStatus.setAttribute('id', 'play-status');
+  playStatus.textContent = `0 Times Through`
   boardDiv.appendChild(playStatus);
 
   const playColor = document.createElement('div');
@@ -244,17 +254,17 @@ const bottomBoard = () => {
   return boardDiv;
 }
 
+const boardChords = [
+  ['Eb', 'G', 'Bb'], // Eb
+  ['C', 'Eb', 'G', 'Bb'], // Cm7
+  ['G', 'Bb', 'D'], // Gm
+  ['F', 'Ab', 'C'], // Fm
+  ['C', 'Eb', 'G'], // Cm
+];
+
 export const setUpApp = () => {
   const app = document.getElementById('app');
   app.appendChild(modal());
   app.appendChild(createBoard(boardChords))
   app.appendChild(bottomBoard());
-
-  // set default number of times and refresh play status
-  setTimes(loopTimes);
-  updatePlayStatus(0);
-
-  document.getElementById("set-loops").addEventListener("click", submitTimes);
-
-  const closeButton = document.querySelector(".close-button");
 }
