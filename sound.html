@@ -263,9 +263,15 @@
   const playRandomNotes = async (chord) => {
     chord.style.backgroundColor = 'gray';
     playRandomNote(chord);
-    await new Promise(resolve => setTimeout(resolve, noteDuration));
+    playRandomNote(chord);
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
+    playRandomNote(chord);
+    playRandomNote(chord);
+    playRandomNote(chord);
+    await new Promise(resolve => setTimeout(resolve, noteDuration));
+    playRandomNote(chord);
+    playRandomNote(chord);
     playRandomNote(chord);
     await new Promise(resolve => setTimeout(resolve, noteDuration));
     chord.style.backgroundColor = 'black';
@@ -320,7 +326,7 @@
     keys.forEach(key => key.addEventListener('pointerup', stopSound));
 
     const selfPlayButton = Array.from(document.querySelectorAll('.self-play'))[0];
-    selfPlayButton.innerHTML = `Press Here To Play ` + loopTimes + ` Times`;
+    selfPlayButton.innerHTML = `Press To Play ` + loopTimes + ` Times`;
     selfPlayButton.addEventListener('pointerdown', loopSelfPlay);
 
     const playStatusDiv = Array.from(document.querySelectorAll('.play-status'))[0];
