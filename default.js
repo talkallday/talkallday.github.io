@@ -128,7 +128,11 @@ const submitTimes = (event) => {
   toggleModal();
 }
 
-window.onload = () => {
+export const renderSoundboard = () => {
+
+}
+
+export const setUpSoundboard = () => {
   // set up soundboard
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('pointerdown', playNote));
@@ -154,4 +158,8 @@ window.onload = () => {
 
   const closeButton = document.querySelector(".close-button");
   closeButton.addEventListener("click", toggleModal);
+}
+
+window.onload = () => {
+  setUpSoundboard();
 }
