@@ -200,3 +200,12 @@ export const playNoteName = (noteName, maxVolume) => {
   let frequency = noteValues.get(noteName);
   playTone(frequency, maxVolume);
 }
+
+export const getNotes = (chord) => {
+  const notes = [];
+  noteNames.forEach((noteName) => {
+    let note = noteName.slice(0, -1);
+    if (chord.includes(note)) notes.push(noteName);
+  })
+  return notes;
+}

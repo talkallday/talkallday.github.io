@@ -1,5 +1,5 @@
 // frequencies currently playing
-import {playNoteName, measure, noteNames} from './utils.js';
+import { playNoteName, measure, getNotes } from './utils.js';
 
 let playing = false;
 let stopped = true;
@@ -16,6 +16,17 @@ const colorNames = {
   'rgb(0, 0, 255)': 'blue',
 }
 
+const playKeyNote = (key) => {
+  key.classList.add('playing');
+  let noteName = key.textContent.replace(/\s/g, '');
+  playNoteName(noteName, autoVolume);
+  setTimeout(() => {
+      stopElement(key);
+    },
+    noteDuration
+  )
+}
+
 const playElement = (key) => {
   let style = getComputedStyle(key);
   const playColor = document.getElementById('play-color');
@@ -29,18 +40,7 @@ const stopElement = (key) => {
   key.classList.remove('playing');
 }
 
-const playKeyNote = (key) => {
-  key.classList.add('playing');
-  let noteName = key.textContent.replace(/\s/g, '');
-  playNoteName(noteName, autoVolume);
-  setTimeout(() => {
-      stopElement(key);
-    },
-    noteDuration
-  )
-}
-
-const playNote = (e) => {
+const playNoteEvent = (e) => {
   playKeyNote(e.target);
 }
 
@@ -68,7 +68,7 @@ const playRandomNotes = async (chord) => {
 }
 
 const play = async () => {
-  if (playing) {return}
+  if (playing) return;
   playing = true;
   const board = document.getElementById('sound-board');
   const chords = [...board.children];
@@ -173,15 +173,6 @@ const boardChords = [
   ['C', 'Eb', 'G'], // Cm
 ];
 
-const getNotes = (chord) => {
-  const notes = [];
-  noteNames.forEach((noteName) => {
-    let note = noteName.slice(0, -1);
-    if (chord.includes(note)) notes.push(noteName);
-  })
-  return notes;
-}
-
 const createBoard = (chords) => {
   const board = document.createElement('div');
   board.classList.add('board');
@@ -252,7 +243,7 @@ export const setUpApp = () => {
 
   // set up soundboard
   const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('pointerdown', playNote));
+  keys.forEach(key => key.addEventListener('pointerdown', playNoteEvent));
 
   // set default number of times and refresh play status
   setTimes(loopTimes);
