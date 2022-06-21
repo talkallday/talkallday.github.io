@@ -209,29 +209,31 @@ const playNoteName = (noteName, maxVolume) => {
 }
 
 const playElement = (key) => {
-  key.classList.add('playing');
   let style = getComputedStyle(key);
   const playColor = Array.from(document.querySelectorAll('.play-color'))[0];
   const currentColor = colorNames[style.backgroundColor];
   playColor.style.backgroundColor = currentColor;
   playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
-  let noteName = key.textContent.replace(/\s/g, '');
-  playNoteName(noteName, autoVolume);
+  playKeyNote(key);
 }
 
 const stopElement = (key) => {
   key.classList.remove('playing');
 }
 
-const playNote = (e) => {
-  e.target.classList.add('playing');
-  let noteName = e.target.textContent.replace(/\s/g, '');
-  playNoteName(noteName, defMaxVolume);
+const playKeyNote = (key) => {
+  key.classList.add('playing');
+  let noteName = key.textContent.replace(/\s/g, '');
+  playNoteName(noteName, autoVolume);
   setTimeout(() => {
-      stopElement(e.target);
+      stopElement(key);
     },
     noteDuration
   )
+}
+
+const playNote = (e) => {
+  playKeyNote(e.target);
 }
 
 const playRandomNote = (chord) => {
@@ -321,7 +323,6 @@ const submitTimes = () => {
   toggleModal();
 }
 
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
 window.onload = () => {
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('pointerdown', playNote));
