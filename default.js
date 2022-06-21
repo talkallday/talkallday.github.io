@@ -1,5 +1,5 @@
 // frequencies currently playing
-import { playNoteName, measure } from './utils.js';
+import {playNoteName, measure, noteNames} from './utils.js';
 
 let playing = false;
 let stopped = true;
@@ -57,7 +57,7 @@ const playRandomNote = (chord) => {
 
 const playRandomNotes = async (chord) => {
   chord.style.backgroundColor = 'gray';
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     if (stopped) {break;}
     playRandomNote(chord);
     playRandomNote(chord);
@@ -77,14 +77,14 @@ const play = async () => {
   const thirdChord = chords[2];
   const fourthChord = chords[3];
   const fifthChord = chords[4];
-  !stopped && playRandomNotes(firstChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(secondChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(thirdChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(thirdChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(fourthChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(fourthChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(fifthChord) && await new Promise(resolve => setTimeout(resolve, mms));
-  !stopped && playRandomNotes(fifthChord);
+  !stopped && await playRandomNotes(firstChord);
+  !stopped && await playRandomNotes(secondChord);
+  !stopped && await playRandomNotes(thirdChord);
+  !stopped && await playRandomNotes(thirdChord);
+  !stopped && await playRandomNotes(fourthChord);
+  !stopped && await playRandomNotes(fourthChord);
+  !stopped && await playRandomNotes(fifthChord);
+  !stopped && await playRandomNotes(fifthChord);
   playing = false;
 }
 
@@ -101,8 +101,7 @@ const loopPlay = async () => {
   const ms = 8 * mms;
   for (let i = 0; i < loopTimes; i++) {
     updatePlayStatus(i);
-    play();
-    await new Promise(resolve => setTimeout(resolve, ms));
+    await play();
     if (stopped) { break; }
   }
   stopped = true;
@@ -128,7 +127,129 @@ const submitTimes = (event) => {
   toggleModal();
 }
 
-window.onload = () => {
+const modal = () => {
+  const timesForm = document.createElement('form');
+  timesForm.setAttribute('id', 'loop-form');
+  timesForm.innerHTML = `
+    <span class="close-button">×</span>
+    <label for="loops-select">Select how many times to loop:</label>
+    <select name="loops" id="loops-select">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+    </select>
+    <button type="button" id="set-loops">change</button>
+  `
+  const modalContentDiv = document.createElement('div');
+  modalContentDiv.classList.add('modal-content');
+
+  const modalDiv = document.createElement('div');
+  modalDiv.classList.add('modal');
+
+  modalContentDiv.appendChild(timesForm)
+  modalDiv.appendChild(modalContentDiv)
+
+  return modalDiv;
+}
+
+const boardChords = [
+  ['Eb', 'G', 'Bb'], // Eb
+  ['C', 'Eb', 'G', 'Bb'], // Cm7
+  ['G', 'Bb', 'D'], // Gm
+  ['F', 'Ab', 'C'], // Fm
+  ['C', 'Eb', 'G'], // Cm
+];
+
+const getNotes = (chord) => {
+  const notes = [];
+  noteNames.forEach((noteName) => {
+    let note = noteName.slice(0, -1);
+    if (chord.includes(note)) notes.push(noteName);
+  })
+  return notes;
+}
+
+const createBoard = (chords) => {
+  const board = document.createElement('div');
+  board.classList.add('board');
+  board.setAttribute('id', 'sound-board');
+  chords.forEach(chord => {
+    const chordDiv = document.createElement('div');
+    chordDiv.classList.add('chord');
+    const chordNotes = getNotes(chord);
+    chordNotes.forEach((note) => {
+      const noteDiv = document.createElement('div');
+      noteDiv.classList.add('press', 'key');
+      const kbd = document.createElement('kbd');
+      kbd.textContent = note;
+      noteDiv.appendChild(kbd);
+      chordDiv.appendChild(noteDiv);
+    })
+    board.appendChild(chordDiv);
+  });
+  return board;
+}
+
+const bottomBoard = () => {
+  const boardDiv = document.createElement('div');
+  boardDiv.classList.add('chord');
+
+  // set up looper
+  const playButton = document.createElement('div');
+  playButton.classList.add('press');
+  playButton.setAttribute('id', 'play');
+  playButton.addEventListener('pointerdown', loopPlay);
+  boardDiv.appendChild(playButton);
+
+  // set up visible playing status
+  const playStatus = document.createElement('div');
+  playStatus.classList.add('press');
+  playStatus.setAttribute('id', 'play-status');
+  boardDiv.appendChild(playStatus);
+
+  const playColor = document.createElement('div');
+  playColor.classList.add('press');
+  playColor.setAttribute('id', 'play-color');
+  playColor.innerHTML = 'Not Playing';
+  boardDiv.appendChild(playColor);
+
+  // set up looper stop
+  const stopButton = document.createElement('div');
+  stopButton.classList.add('press');
+  stopButton.setAttribute('id', 'stop-button');
+  stopButton.innerHTML = 'Press To Stop';
+  stopButton.addEventListener('pointerdown', stopLoop);
+  boardDiv.appendChild(stopButton);
+
+  const modalLoops = document.createElement('div');
+  modalLoops.classList.add('press');
+  modalLoops.setAttribute('id', 'modal-loops');
+  modalLoops.innerHTML = 'Change Loop Times';
+  modalLoops.addEventListener("click", toggleModal);
+  boardDiv.appendChild(modalLoops);
+
+  return boardDiv;
+}
+
+export const setUpApp = () => {
+  const app = document.getElementById('app');
+  app.appendChild(modal());
+  app.appendChild(createBoard(boardChords))
+  app.appendChild(bottomBoard());
+
   // set up soundboard
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('pointerdown', playNote));
@@ -136,19 +257,6 @@ window.onload = () => {
   // set default number of times and refresh play status
   setTimes(loopTimes);
   updatePlayStatus(0);
-
-  // set up visible playing status
-  document.querySelector('#play-color').innerHTML = 'Not Playing';
-
-  // set up looper
-  document.querySelector('#play').addEventListener('pointerdown', loopPlay);
-
-  // set up looper stop
-  const stopButton = document.getElementById('stop-button');
-  stopButton.innerHTML = 'Press To Stop';
-  stopButton.addEventListener('pointerdown', stopLoop);
-
-  document.getElementById("modal-loops").addEventListener("click", toggleModal);
 
   document.getElementById("set-loops").addEventListener("click", submitTimes);
 
