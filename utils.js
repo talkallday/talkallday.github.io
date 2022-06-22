@@ -30,8 +30,8 @@ const playTone = (frequency) => {
   let arr = [],
     seconds = measure * (1 / measureSubdivisions) - .001,
     srs = context.sampleRate * seconds,
-    earlyCut = srs * 0.1,
-    lateCut = srs * 0.9
+    earlyCut = srs * 0.2,
+    lateCut = srs * 0.8
 
   for (let i = 0; i < srs; i++) {
     let volume = defMaxVolume;
