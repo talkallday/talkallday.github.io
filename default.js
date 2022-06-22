@@ -108,7 +108,7 @@ const updatePlayStatus = (newTime) => {
 
 const loopPlay = async () => {
   const playButton = document.getElementById('play');
-  playButton.innerHTML = `Stop &#128721;`;
+  playButton.innerHTML = `&#128721;`;
   stopped = false;
   for (let i = 0; i < loopTimes; i++) {
     updatePlayStatus(i);
@@ -116,31 +116,29 @@ const loopPlay = async () => {
     if (stopped) { break; }
   }
   stopped = true;
-  playButton.innerHTML = `Play &#9654; ` + loopTimes + ` Times`;
+  playButton.innerHTML = `&#9654; `;
   updatePlayStatus(0);
 }
 
 const setTimes = (numTimes) => {
-  const playButton = document.getElementById('play');
-  // set global loop times
   loopTimes = numTimes;
-  // set visible loop time
-  playButton.innerHTML = `Press &#9654; ` + loopTimes + ` Times`;
-}
-
-const toggleModal = () => {
-  const modal = document.getElementById("modal-popup");
-  modal.classList.toggle("show-modal");
 }
 
 const toggleSynth = () => {
+  let synthOption = document.getElementById('synth-option');
   if (synth) {
     synth = null
+    synthOption.style.backgroundColor = 'black'
+    synthOption.style.color = 'white'
+    synthOption.textContent = `Turn ToneJS On`
   } else {
     synth = new Tone.PolySynth();
     const gain = new Tone.Gain(defMaxVolume);
     const autoPanner = new Tone.AutoPanner("4n").toDestination();
     synth.chain(gain, autoPanner);
+    synthOption.style.backgroundColor = 'white'
+    synthOption.style.color = 'black'
+    synthOption.textContent = `Turn ToneJS Off`
   }
 }
 
@@ -150,21 +148,13 @@ const submitTimes = (event) => {
   event.preventDefault();
   const timesInput = document.getElementById('loops-select');
   setTimes(timesInput.value);
-  toggleModal();
-}
-
-const getCloseButton = () => {
-  const closeButton = document.createElement('span');
-  closeButton.classList.add('close-button');
-  closeButton.textContent = `x`;
-  closeButton.addEventListener("click", toggleModal);
-  return closeButton;
 }
 
 const getLoopLabel = () => {
   const loopLabel = document.createElement('label');
   loopLabel.setAttribute('for', 'loops-select');
-  loopLabel.textContent = `select how many times to loop: `;
+  loopLabel.textContent = `Loops`;
+  loopLabel.style.color = 'white';
   return loopLabel;
 }
 
@@ -172,49 +162,26 @@ const getLoopSelect = () => {
   const loopSelect = document.createElement('select');
   loopSelect.setAttribute('id', 'loops-select');
   loopSelect.setAttribute('name', 'loops');
+  loopSelect.addEventListener('change', submitTimes);
   for (let v = 0; v < 16; v++) {
     let optionValue = v + 1;
     let loopOption = document.createElement('option');
     loopOption.textContent = optionValue.toString();
     loopOption.value = optionValue.toString();
+    if (optionValue === loopTimes) {
+      loopOption.setAttribute('selected', 'selected');
+    }
     loopSelect.appendChild(loopOption);
   }
   return loopSelect;
 }
 
-const getLoopButton = () => {
-  const loopButton = document.createElement('button');
-  loopButton.setAttribute('type', 'button');
-  loopButton.setAttribute('id', 'set-loops');
-  loopButton.addEventListener("click", submitTimes);
-  loopButton.textContent = `change`;
-  return loopButton;
-}
-
 const getTimesForm = () => {
   const timesForm = document.createElement('form');
   timesForm.setAttribute('id', 'loop-form');
-  timesForm.appendChild(getCloseButton());
-  timesForm.appendChild(getLoopLabel());
   timesForm.appendChild(getLoopSelect());
-  timesForm.appendChild(getLoopButton());
+  timesForm.appendChild(getLoopLabel());
   return timesForm;
-}
-
-const modal = () => {
-
-  const modalContentDiv = document.createElement('div');
-  modalContentDiv.classList.add('modal-content');
-
-  modalContentDiv.appendChild(getTimesForm())
-
-  const modalDiv = document.createElement('div');
-  modalDiv.setAttribute('id', 'modal-popup');
-  modalDiv.classList.add('modal');
-
-  modalDiv.appendChild(modalContentDiv)
-
-  return modalDiv;
 }
 
 const createBoard = (chords) => {
@@ -243,58 +210,36 @@ const bottomBoard = () => {
   const boardDiv = document.createElement('div');
   boardDiv.classList.add('chord');
 
-  // set up looper
-  const playButton = document.createElement('div');
-  playButton.classList.add('press');
-  playButton.setAttribute('id', 'play');
-  playButton.innerHTML = `Play &#9654; ` + loopTimes + ` Times`;
-  playButton.addEventListener('pointerdown', loopPlay);
-  boardDiv.appendChild(playButton);
-
-  // set up visible playing status
-  const playStatus = document.createElement('div');
-  playStatus.classList.add('press');
-  playStatus.setAttribute('id', 'play-status');
-  playStatus.textContent = `0 Times Through`
-  boardDiv.appendChild(playStatus);
-
   const playColor = document.createElement('div');
   playColor.classList.add('press');
   playColor.setAttribute('id', 'play-color');
   playColor.innerHTML = 'Not Playing';
   boardDiv.appendChild(playColor);
 
-  const modalLoops = document.createElement('div');
-  modalLoops.classList.add('press');
-  modalLoops.setAttribute('id', 'modal-loops');
-  modalLoops.innerHTML = 'Change Loop Times';
-  modalLoops.addEventListener("click", toggleModal);
-  boardDiv.appendChild(modalLoops);
+  // set up play button
+  const playButton = document.createElement('div');
+  playButton.classList.add('press');
+  playButton.setAttribute('id', 'play');
+  playButton.innerHTML = `&#9654;`;
+  playButton.addEventListener('pointerdown', loopPlay);
+  boardDiv.appendChild(playButton);
 
-  const synth = document.createElement('div');
-  synth.classList.add('press');
-  synth.setAttribute('id', 'synth-option');
-  const synthLabel = document.createElement('label');
-  synthLabel.classList.add('toggle-switchy');
-  synthLabel.setAttribute('htmlfor', 'synth-toggle');
-  synthLabel.textContent = `Synth: `
+  boardDiv.appendChild(getTimesForm());
 
-  const synthInput = document.createElement('input');
-  synthInput.setAttribute('type', 'checkbox');
-  synthInput.setAttribute('id', 'synth-toggle');
-  synthInput.addEventListener("click", toggleSynth);
-  synthLabel.appendChild(synthInput);
 
-  const toggleSpan = document.createElement('span');
-  toggleSpan.classList.add('toggle');
-  const switchSpan = document.createElement('span');
-  switchSpan.classList.add('switch');
-  toggleSpan.appendChild(switchSpan);
-  synthLabel.appendChild(toggleSpan);
+  // set up visible playing status
+  const playStatus = document.createElement('div');
+  playStatus.classList.add('press');
+  playStatus.setAttribute('id', 'play-status');
+  playStatus.textContent = `0 Time(s) Through`
+  boardDiv.appendChild(playStatus);
 
-  synth.appendChild(synthLabel);
-
-  boardDiv.appendChild(synth);
+  const synthOption = document.createElement('div');
+  synthOption.classList.add('press');
+  synthOption.setAttribute('id', 'synth-option');
+  synthOption.addEventListener("click", toggleSynth);
+  synthOption.textContent = `Turn ToneJS On`;
+  boardDiv.appendChild(synthOption);
 
   return boardDiv;
 }
@@ -309,7 +254,6 @@ const boardChords = [
 
 export const setUpApp = () => {
   const app = document.getElementById('app');
-  app.appendChild(modal());
   app.appendChild(createBoard(boardChords))
   app.appendChild(bottomBoard());
 }
