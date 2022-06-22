@@ -38,6 +38,28 @@ const playNoteEvent = (e) => {
   playNoteKey(e.target);
 }
 
+const createBoard = (chords) => {
+  const board = document.createElement('div');
+  board.classList.add('board');
+  board.setAttribute('id', 'sound-board');
+  chords.forEach(chord => {
+    const chordDiv = document.createElement('div');
+    chordDiv.classList.add('chord');
+    const chordNotes = getAllNotes(chord);
+    chordNotes.forEach((note) => {
+      const noteDiv = document.createElement('div');
+      noteDiv.classList.add('press', 'key');
+      noteDiv.addEventListener('pointerdown', playNoteEvent)
+      const kbd = document.createElement('kbd');
+      kbd.textContent = note;
+      noteDiv.appendChild(kbd);
+      chordDiv.appendChild(noteDiv);
+    })
+    board.appendChild(chordDiv);
+  });
+  return board;
+}
+
 const getRandomKeys = (chordDiv, n) => {
   let keyDivs = chordDiv.children;
   let randomKeys = [];
@@ -188,65 +210,44 @@ const getTimesForm = () => {
   return timesForm;
 }
 
-const createBoard = (chords) => {
-  const board = document.createElement('div');
-  board.classList.add('board');
-  board.setAttribute('id', 'sound-board');
-  chords.forEach(chord => {
-    const chordDiv = document.createElement('div');
-    chordDiv.classList.add('chord');
-    const chordNotes = getAllNotes(chord);
-    chordNotes.forEach((note) => {
-      const noteDiv = document.createElement('div');
-      noteDiv.classList.add('press', 'key');
-      noteDiv.addEventListener('pointerdown', playNoteEvent)
-      const kbd = document.createElement('kbd');
-      kbd.textContent = note;
-      noteDiv.appendChild(kbd);
-      chordDiv.appendChild(noteDiv);
-    })
-    board.appendChild(chordDiv);
-  });
-  return board;
-}
-
-const bottomBoard = () => {
-  const boardDiv = document.createElement('div');
-  boardDiv.classList.add('chord');
+const footer = () => {
+  const footerDiv = document.createElement('div');
+  footerDiv.classList.add('chord');
 
   // color chord status
   const rowColor = document.createElement('div');
   rowColor.classList.add('press');
   rowColor.setAttribute('id', 'play-color');
   rowColor.innerHTML = 'Not Playing';
-  boardDiv.appendChild(rowColor);
+  footerDiv.appendChild(rowColor);
 
-  // set up play button
+  // play button
   const playButton = document.createElement('div');
   playButton.classList.add('press');
   playButton.setAttribute('id', 'play');
   playButton.innerHTML = `&#9654;`;
   playButton.addEventListener('pointerdown', loopPlay);
-  boardDiv.appendChild(playButton);
+  footerDiv.appendChild(playButton);
 
-  boardDiv.appendChild(getTimesForm());
+  // to change number of loops
+  footerDiv.appendChild(getTimesForm());
 
+  // loop status
+  const loopStatus = document.createElement('div');
+  loopStatus.classList.add('press');
+  loopStatus.setAttribute('id', 'play-status');
+  loopStatus.textContent = `Loop 0 of ` + loopTimes;
+  footerDiv.appendChild(loopStatus);
 
-  // set up visible playing status
-  const playStatus = document.createElement('div');
-  playStatus.classList.add('press');
-  playStatus.setAttribute('id', 'play-status');
-  playStatus.textContent = `Loop 0 of ` + loopTimes;
-  boardDiv.appendChild(playStatus);
-
+  // allow use of ToneJS for autoplay
   const synthOption = document.createElement('div');
   synthOption.classList.add('press');
   synthOption.setAttribute('id', 'synth-option');
   synthOption.addEventListener("click", toggleSynth);
   synthOption.textContent = `Turn ToneJS On`;
-  boardDiv.appendChild(synthOption);
+  footerDiv.appendChild(synthOption);
 
-  return boardDiv;
+  return footerDiv;
 }
 
 const boardChords = [
@@ -260,7 +261,7 @@ const boardChords = [
 export const setUpApp = () => {
   const app = document.getElementById('app');
   app.appendChild(createBoard(boardChords))
-  app.appendChild(bottomBoard());
+  app.appendChild(footer());
 }
 
 window.onload = () => {
