@@ -2,6 +2,7 @@
 import { playNoteName, measure, getAllNotes, measureSubdivisions, defMaxVolume } from './utils.js';
 
 let playing = false;
+let currentLoop = 0;
 let stopped = true;
 let loopTimes = 4;
 const msPerMeasure = measure * 1000;
@@ -102,8 +103,8 @@ const play = async () => {
   playing = false;
 }
 
-const updatePlayStatus = (newTime) => {
-  document.getElementById('play-status').innerHTML = newTime + `x Through`;
+const updatePlayStatus = () => {
+  document.getElementById('play-status').innerHTML = `Loop ` + currentLoop + ` of ` + loopTimes;
 }
 
 const loopPlay = async () => {
@@ -111,13 +112,15 @@ const loopPlay = async () => {
   playButton.innerHTML = `&#128721;`;
   stopped = false;
   for (let i = 0; i < loopTimes; i++) {
-    updatePlayStatus(i);
+    currentLoop += 1;
+    updatePlayStatus();
     await play();
     if (stopped) { break; }
   }
+  currentLoop = 0;
   stopped = true;
   playButton.innerHTML = `&#9654; `;
-  updatePlayStatus(0);
+  updatePlayStatus();
 }
 
 const setTimes = (numTimes) => {
@@ -148,6 +151,7 @@ const submitTimes = (event) => {
   event.preventDefault();
   const timesInput = document.getElementById('loops-select');
   setTimes(timesInput.value);
+  updatePlayStatus();
 }
 
 const getLoopLabel = () => {
@@ -210,11 +214,12 @@ const bottomBoard = () => {
   const boardDiv = document.createElement('div');
   boardDiv.classList.add('chord');
 
-  const playColor = document.createElement('div');
-  playColor.classList.add('press');
-  playColor.setAttribute('id', 'play-color');
-  playColor.innerHTML = 'Not Playing';
-  boardDiv.appendChild(playColor);
+  // color chord status
+  const rowColor = document.createElement('div');
+  rowColor.classList.add('press');
+  rowColor.setAttribute('id', 'play-color');
+  rowColor.innerHTML = 'Not Playing';
+  boardDiv.appendChild(rowColor);
 
   // set up play button
   const playButton = document.createElement('div');
@@ -231,7 +236,7 @@ const bottomBoard = () => {
   const playStatus = document.createElement('div');
   playStatus.classList.add('press');
   playStatus.setAttribute('id', 'play-status');
-  playStatus.textContent = `0x Through`
+  playStatus.textContent = `Loop 0 of ` + loopTimes;
   boardDiv.appendChild(playStatus);
 
   const synthOption = document.createElement('div');
