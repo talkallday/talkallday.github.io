@@ -34,6 +34,11 @@ const playElement = (key) => {
   playColor.style.backgroundColor = currentColor;
   playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
   playKeyNote(key);
+  setTimeout(() => {
+      stopElement(key);
+    },
+    noteDuration
+  )
 }
 
 const stopElement = (key) => {
@@ -44,24 +49,26 @@ const playNoteEvent = (e) => {
   playKeyNote(e.target);
 }
 
-const playRandomNote = (chord) => {
+const getRandomKeys = (chord, n) => {
   let keys = chord.children;
-  const randomKey = keys[Math.floor(Math.random() * keys.length)];
-  playElement(randomKey);
-  setTimeout(() => {
-      stopElement(randomKey);
-    },
-    noteDuration
-  )
+  let randomKeys = [];
+  let keyIndices = Array(keys.length).fill().map((x,i)=>i);
+  for (let i = 0; i < n; i++) {
+    let randomKeyIndex = Math.floor(Math.random() * keyIndices.length);
+    let keyIndex = keyIndices[randomKeyIndex];
+    let randomKey = keys[keyIndex];
+    randomKeys.push(randomKey);
+    keyIndices.splice(randomKeyIndex, 1);
+  }
+  return randomKeys;
 }
 
 const playRandomNotes = async (chord) => {
   chord.style.backgroundColor = 'gray';
   for (let i = 0; i < measureSubdivisions; i++) {
     if (stopped) {break;}
-    playRandomNote(chord);
-    playRandomNote(chord);
-    playRandomNote(chord);
+    let randomChordKeys = getRandomKeys(chord, 4);
+    randomChordKeys.forEach((key) => {playElement(key);})
     await new Promise(resolve => setTimeout(resolve, noteDuration));
   }
   chord.style.backgroundColor = 'black';
