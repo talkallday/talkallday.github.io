@@ -103,7 +103,7 @@ const play = async () => {
 }
 
 const updatePlayStatus = (newTime) => {
-  document.getElementById('play-status').innerHTML = newTime + ` Times Through`;
+  document.getElementById('play-status').innerHTML = newTime + `x Through`;
 }
 
 const loopPlay = async () => {
@@ -231,7 +231,7 @@ const bottomBoard = () => {
   const playStatus = document.createElement('div');
   playStatus.classList.add('press');
   playStatus.setAttribute('id', 'play-status');
-  playStatus.textContent = `0 Time(s) Through`
+  playStatus.textContent = `0x Through`
   boardDiv.appendChild(playStatus);
 
   const synthOption = document.createElement('div');
