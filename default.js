@@ -14,32 +14,27 @@ const colorNames = {
   'rgb(0, 0, 255)': 'blue',
 }
 
-const playKeyNote = (key) => {
-  key.classList.add('playing');
-  let noteName = getNoteName(key);
-  playNoteName(noteName);
+const playElement = (keyElement) => {
+  keyElement.classList.add('playing');
   setTimeout(() => {
-      stopElement(key);
+      stopElement(keyElement);
     },
     noteDuration
   )
-}
-
-const playElement = (key) => {
-  let style = getComputedStyle(key);
-  const playColor = document.getElementById('play-color');
-  const currentColor = colorNames[style.backgroundColor];
-  playColor.style.backgroundColor = currentColor;
-  playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
-  playKeyNote(key);
 }
 
 const stopElement = (key) => {
   key.classList.remove('playing');
 }
 
+const playNoteKey = (key) => {
+  playElement(key);
+  let noteName = getNoteName(key);
+  playNoteName(noteName);
+}
+
 const playNoteEvent = (e) => {
-  playKeyNote(e.target);
+  playNoteKey(e.target);
 }
 
 const getRandomKeys = (chordDiv, n) => {
@@ -65,12 +60,21 @@ const playRandomNotes = async (chord) => {
   for (let i = 0; i < measureSubdivisions; i++) {
     if (stopped) {break;}
     let randomChordKeys = getRandomKeys(chord, 4);
-    //create a synth and connect it to the main output (your speakers)
+    let firstKey = randomChordKeys[0];
+    let style = getComputedStyle(firstKey);
+    const playColor = document.getElementById('play-color');
+    const currentColor = colorNames[style.backgroundColor];
+    playColor.style.backgroundColor = currentColor;
+    playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
     if (synth) {
-      let randomNotes = Array.from(randomChordKeys, key => getNoteName(key));
+      let randomNotes = [];
+      randomChordKeys.forEach(key => {
+        randomNotes.push(getNoteName(key));
+        playElement(key);
+      });
       synth.triggerAttackRelease(randomNotes, "8n");
     } else {
-      randomChordKeys.forEach(key => playElement(key))
+      randomChordKeys.forEach(keyElement => playNoteKey(keyElement))
     }
     await new Promise(resolve => setTimeout(resolve, noteDuration));
   }
@@ -98,15 +102,13 @@ const play = async () => {
   playing = false;
 }
 
-const stopLoop = () => {
-  stopped = true;
-}
-
 const updatePlayStatus = (newTime) => {
   document.getElementById('play-status').innerHTML = newTime + ` Times Through`;
 }
 
 const loopPlay = async () => {
+  const playButton = document.getElementById('play');
+  playButton.innerHTML = `Stop &#128721;`;
   stopped = false;
   for (let i = 0; i < loopTimes; i++) {
     updatePlayStatus(i);
@@ -114,6 +116,8 @@ const loopPlay = async () => {
     if (stopped) { break; }
   }
   stopped = true;
+  playButton.innerHTML = `Play &#9654; ` + loopTimes + ` Times`;
+  updatePlayStatus(0);
 }
 
 const setTimes = (numTimes) => {
@@ -121,7 +125,7 @@ const setTimes = (numTimes) => {
   // set global loop times
   loopTimes = numTimes;
   // set visible loop time
-  playButton.innerHTML = `Press To Play ` + loopTimes + ` Times`;
+  playButton.innerHTML = `Press &#9654; ` + loopTimes + ` Times`;
 }
 
 const toggleModal = () => {
@@ -134,9 +138,9 @@ const toggleSynth = () => {
     synth = null
   } else {
     synth = new Tone.PolySynth();
-    let vol = defMaxVolume;
-    const gain = new Tone.Gain(vol).toDestination();
-    synth.chain(gain);
+    const gain = new Tone.Gain(defMaxVolume);
+    const autoPanner = new Tone.AutoPanner("4n").toDestination();
+    synth.chain(gain, autoPanner);
   }
 }
 
@@ -243,7 +247,7 @@ const bottomBoard = () => {
   const playButton = document.createElement('div');
   playButton.classList.add('press');
   playButton.setAttribute('id', 'play');
-  playButton.innerHTML = `Press To Play ` + loopTimes + ` Times`;
+  playButton.innerHTML = `Play &#9654; ` + loopTimes + ` Times`;
   playButton.addEventListener('pointerdown', loopPlay);
   boardDiv.appendChild(playButton);
 
@@ -260,14 +264,6 @@ const bottomBoard = () => {
   playColor.innerHTML = 'Not Playing';
   boardDiv.appendChild(playColor);
 
-  // set up looper stop
-  const stopButton = document.createElement('div');
-  stopButton.classList.add('press');
-  stopButton.setAttribute('id', 'stop-button');
-  stopButton.innerHTML = 'Press To Stop';
-  stopButton.addEventListener('pointerdown', stopLoop);
-  boardDiv.appendChild(stopButton);
-
   const modalLoops = document.createElement('div');
   modalLoops.classList.add('press');
   modalLoops.setAttribute('id', 'modal-loops');
@@ -277,9 +273,27 @@ const bottomBoard = () => {
 
   const synth = document.createElement('div');
   synth.classList.add('press');
-  synth.setAttribute('id', 'synth-toggle');
-  synth.innerHTML = 'Toggle Synth';
-  synth.addEventListener("click", toggleSynth);
+  synth.setAttribute('id', 'synth-option');
+  const synthLabel = document.createElement('label');
+  synthLabel.classList.add('toggle-switchy');
+  synthLabel.setAttribute('htmlfor', 'synth-toggle');
+  synthLabel.textContent = `Synth: `
+
+  const synthInput = document.createElement('input');
+  synthInput.setAttribute('type', 'checkbox');
+  synthInput.setAttribute('id', 'synth-toggle');
+  synthInput.addEventListener("click", toggleSynth);
+  synthLabel.appendChild(synthInput);
+
+  const toggleSpan = document.createElement('span');
+  toggleSpan.classList.add('toggle');
+  const switchSpan = document.createElement('span');
+  switchSpan.classList.add('switch');
+  toggleSpan.appendChild(switchSpan);
+  synthLabel.appendChild(toggleSpan);
+
+  synth.appendChild(synthLabel);
+
   boardDiv.appendChild(synth);
 
   return boardDiv;
