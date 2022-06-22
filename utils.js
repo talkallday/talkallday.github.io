@@ -2,7 +2,7 @@ const context = new AudioContext();
 
 export const measure = 2.5;
 export const measureSubdivisions = 4;
-const defMaxVolume = 0.1;
+export const defMaxVolume = 0.1;
 
 let frequencies = new Set();
 
@@ -196,16 +196,16 @@ const noteValues = new Map([
    */
 ]);
 
-export const noteNames = [...noteValues.keys()];
+export const allNoteNames = [...noteValues.keys()];
 
 export const playNoteName = (noteName) => {
   let frequency = noteValues.get(noteName);
   playTone(frequency);
 }
 
-export const getNotes = (chord) => {
+export const getAllNotes = (chord) => {
   const notes = [];
-  noteNames.forEach((noteName) => {
+  allNoteNames.forEach((noteName) => {
     let note = noteName.slice(0, -1);
     if (chord.includes(note)) notes.push(noteName);
   })

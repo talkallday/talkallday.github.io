@@ -1,5 +1,5 @@
 // frequencies currently playing
-import { playNoteName, measure, getNotes, measureSubdivisions } from './utils.js';
+import { playNoteName, measure, getAllNotes, measureSubdivisions, defMaxVolume } from './utils.js';
 
 let playing = false;
 let stopped = true;
@@ -16,7 +16,7 @@ const colorNames = {
 
 const playKeyNote = (key) => {
   key.classList.add('playing');
-  let noteName = key.textContent.replace(/\s/g, '');
+  let noteName = getNoteName(key);
   playNoteName(noteName);
   setTimeout(() => {
       stopElement(key);
@@ -42,18 +42,22 @@ const playNoteEvent = (e) => {
   playKeyNote(e.target);
 }
 
-const getRandomKeys = (chord, n) => {
-  let keys = chord.children;
+const getRandomKeys = (chordDiv, n) => {
+  let keyDivs = chordDiv.children;
   let randomKeys = [];
-  let keyIndices = Array(keys.length).fill().map((x,i)=>i);
+  let keyIndices = Array(keyDivs.length).fill().map((x,i)=>i);
   for (let i = 0; i < n; i++) {
     let randomKeyIndex = Math.floor(Math.random() * keyIndices.length);
     let keyIndex = keyIndices[randomKeyIndex];
-    let randomKey = keys[keyIndex];
+    let randomKey = keyDivs[keyIndex];
     randomKeys.push(randomKey);
     keyIndices.splice(randomKeyIndex, 1);
   }
   return randomKeys;
+}
+
+const getNoteName = (key) => {
+  return key.textContent.replace(/\s/g, '');
 }
 
 const playRandomNotes = async (chord) => {
@@ -61,7 +65,13 @@ const playRandomNotes = async (chord) => {
   for (let i = 0; i < measureSubdivisions; i++) {
     if (stopped) {break;}
     let randomChordKeys = getRandomKeys(chord, 4);
-    randomChordKeys.forEach((key) => {playElement(key);})
+    //create a synth and connect it to the main output (your speakers)
+    if (synth) {
+      let randomNotes = Array.from(randomChordKeys, key => getNoteName(key));
+      synth.triggerAttackRelease(randomNotes, "8n");
+    } else {
+      randomChordKeys.forEach(key => playElement(key))
+    }
     await new Promise(resolve => setTimeout(resolve, noteDuration));
   }
   chord.style.backgroundColor = 'black';
@@ -115,9 +125,22 @@ const setTimes = (numTimes) => {
 }
 
 const toggleModal = () => {
-  const modal = Array.from(document.querySelectorAll(".modal"))[0];
+  const modal = document.getElementById("modal-popup");
   modal.classList.toggle("show-modal");
 }
+
+const toggleSynth = () => {
+  if (synth) {
+    synth = null
+  } else {
+    synth = new Tone.PolySynth();
+    let vol = defMaxVolume;
+    const gain = new Tone.Gain(vol).toDestination();
+    synth.chain(gain);
+  }
+}
+
+let synth = null;
 
 const submitTimes = (event) => {
   event.preventDefault();
@@ -182,6 +205,7 @@ const modal = () => {
   modalContentDiv.appendChild(getTimesForm())
 
   const modalDiv = document.createElement('div');
+  modalDiv.setAttribute('id', 'modal-popup');
   modalDiv.classList.add('modal');
 
   modalDiv.appendChild(modalContentDiv)
@@ -196,7 +220,7 @@ const createBoard = (chords) => {
   chords.forEach(chord => {
     const chordDiv = document.createElement('div');
     chordDiv.classList.add('chord');
-    const chordNotes = getNotes(chord);
+    const chordNotes = getAllNotes(chord);
     chordNotes.forEach((note) => {
       const noteDiv = document.createElement('div');
       noteDiv.classList.add('press', 'key');
@@ -250,6 +274,13 @@ const bottomBoard = () => {
   modalLoops.innerHTML = 'Change Loop Times';
   modalLoops.addEventListener("click", toggleModal);
   boardDiv.appendChild(modalLoops);
+
+  const synth = document.createElement('div');
+  synth.classList.add('press');
+  synth.setAttribute('id', 'synth-toggle');
+  synth.innerHTML = 'Toggle Synth';
+  synth.addEventListener("click", toggleSynth);
+  boardDiv.appendChild(synth);
 
   return boardDiv;
 }
