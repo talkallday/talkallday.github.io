@@ -25,19 +25,6 @@ background-color: black;
   color: white;
 }
 
-#play-status {
-  background: violet;
-}
-
-#play-color {
-  background: black;
-}
-
-#stop-button {
-  background: white;
-  color: black;
-}
-
 .playing {
   transform: scale(1.1);
   border-color: #ffc600;
@@ -57,7 +44,6 @@ kbd {
 
 .board {
   justify-content: center;
-  width: 95%;
 }
 
 .chord {
