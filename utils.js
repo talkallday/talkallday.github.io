@@ -2,6 +2,7 @@ const context = new AudioContext();
 
 export const measure = 2.5;
 export const measureSubdivisions = 4;
+const defMaxVolume = 0.1;
 
 let frequencies = new Set();
 
@@ -21,7 +22,7 @@ const playSound = (arr) => {
   source.start(0);
 }
 
-const playTone = (frequency, maxVolume) => {
+const playTone = (frequency) => {
   if (frequencies.has(frequency)) return;
 
   frequencies.add(frequency)
@@ -33,16 +34,16 @@ const playTone = (frequency, maxVolume) => {
     lateCut = srs * 0.9
 
   for (let i = 0; i < srs; i++) {
-    let volume = maxVolume;
+    let volume = defMaxVolume;
     if (i < earlyCut) {
       volume *= (i / earlyCut);
     } else if (i > lateCut) {
       volume *= ((srs - i) / earlyCut);
     } else {
-      volume = maxVolume;
+      volume = defMaxVolume;
     }
-    if (volume > maxVolume) {
-      volume = maxVolume;
+    if (volume > defMaxVolume) {
+      volume = defMaxVolume;
     }
     arr[i] = sineWaveAt(i, frequency) * volume;
   }
@@ -197,9 +198,9 @@ const noteValues = new Map([
 
 export const noteNames = [...noteValues.keys()];
 
-export const playNoteName = (noteName, maxVolume) => {
+export const playNoteName = (noteName) => {
   let frequency = noteValues.get(noteName);
-  playTone(frequency, maxVolume);
+  playTone(frequency);
 }
 
 export const getNotes = (chord) => {

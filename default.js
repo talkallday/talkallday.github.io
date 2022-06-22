@@ -5,8 +5,6 @@ let playing = false;
 let stopped = true;
 let loopTimes = 4;
 const msPerMeasure = measure * 1000;
-const defMaxVolume = 0.4;
-const autoVolume = defMaxVolume * 0.5;
 const noteDuration = (1 / measureSubdivisions) * msPerMeasure;
 const colorNames = {
   'rgb(255, 0, 0)': 'red',
@@ -19,7 +17,7 @@ const colorNames = {
 const playKeyNote = (key) => {
   key.classList.add('playing');
   let noteName = key.textContent.replace(/\s/g, '');
-  playNoteName(noteName, autoVolume);
+  playNoteName(noteName);
   setTimeout(() => {
       stopElement(key);
     },
@@ -34,11 +32,6 @@ const playElement = (key) => {
   playColor.style.backgroundColor = currentColor;
   playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
   playKeyNote(key);
-  setTimeout(() => {
-      stopElement(key);
-    },
-    noteDuration
-  )
 }
 
 const stopElement = (key) => {
