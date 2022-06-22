@@ -268,3 +268,7 @@ export const setUpApp = () => {
   app.appendChild(createBoard(boardChords))
   app.appendChild(bottomBoard());
 }
+
+window.onload = () => {
+  setUpApp();
+}
