@@ -131,7 +131,8 @@ const updatePlayStatus = () => {
 
 const loopPlay = async () => {
   const playButton = document.getElementById('play');
-  playButton.innerHTML = `&#128721;`;
+  playButton.innerHTML = `Stop`;
+  playButton.style.backgroundColor = "red";
   stopped = false;
   for (let i = 0; i < loopTimes; i++) {
     currentLoop += 1;
@@ -141,7 +142,8 @@ const loopPlay = async () => {
   }
   currentLoop = 0;
   stopped = true;
-  playButton.innerHTML = `&#9654; `;
+  playButton.innerHTML = `Play`;
+  playButton.style.backgroundColor = "green";
   updatePlayStatus();
 }
 
@@ -179,7 +181,7 @@ const submitTimes = (event) => {
 const getLoopLabel = () => {
   const loopLabel = document.createElement('label');
   loopLabel.setAttribute('for', 'loops-select');
-  loopLabel.textContent = `Loops`;
+  loopLabel.textContent = ` Loops`;
   loopLabel.style.color = 'white';
   return loopLabel;
 }
@@ -214,18 +216,12 @@ const footer = () => {
   const footerDiv = document.createElement('div');
   footerDiv.classList.add('chord');
 
-  // color chord status
-  const rowColor = document.createElement('div');
-  rowColor.classList.add('press');
-  rowColor.setAttribute('id', 'play-color');
-  rowColor.innerHTML = 'Not Playing';
-  footerDiv.appendChild(rowColor);
-
   // play button
   const playButton = document.createElement('div');
   playButton.classList.add('press');
   playButton.setAttribute('id', 'play');
-  playButton.innerHTML = `&#9654;`;
+  playButton.innerHTML = `Play`;
+  playButton.style.backgroundColor = "green";
   playButton.addEventListener('pointerdown', loopPlay);
   footerDiv.appendChild(playButton);
 
@@ -238,6 +234,13 @@ const footer = () => {
   loopStatus.setAttribute('id', 'play-status');
   loopStatus.textContent = `Loop 0 of ` + loopTimes;
   footerDiv.appendChild(loopStatus);
+
+  // color chord status
+  const rowColor = document.createElement('div');
+  rowColor.classList.add('press');
+  rowColor.setAttribute('id', 'play-color');
+  rowColor.innerHTML = 'Not Playing';
+  footerDiv.appendChild(rowColor);
 
   // allow use of ToneJS for autoplay
   const synthOption = document.createElement('div');
