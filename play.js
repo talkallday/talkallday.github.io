@@ -1,5 +1,5 @@
-import playNoteKey from './PlayNoteKey.js';
-import { getNoteName, playElement } from './boardUtils.js';
+import playNoteKey from './utils/PlayNoteKey.js';
+import { getNoteName, playElement } from './utils/boardUtils.js';
 import State from './State.js';
 
 const colorNames = {

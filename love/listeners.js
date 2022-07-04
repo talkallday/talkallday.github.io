@@ -1,4 +1,4 @@
-import play from './play.js'
+import play from './utils/play.js'
 import State from './State.js';
 
 const updatePlayStatus = () => {

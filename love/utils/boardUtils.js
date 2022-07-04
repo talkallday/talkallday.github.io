@@ -1,4 +1,4 @@
-import State from "./State.js";
+import State from '../State.js';
 
 export const getNoteName = (key) => {
   return key.textContent.replace(/\s/g, '');

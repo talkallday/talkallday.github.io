@@ -1,6 +1,6 @@
 import createElement from './utils.js';
-import playNoteKey from '../PlayNoteKey.js';
-import noteValues from '../NoteValues.js';
+import playNoteKey from '../utils/PlayNoteKey.js';
+import noteValues from '../utils/NoteValues.js';
 
 const boardChords = [
   ['Eb', 'G', 'Bb'], // Eb

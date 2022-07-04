@@ -1,5 +1,5 @@
-import { getNoteName, playElement } from './boardUtils.js';
-import noteValues from './NoteValues.js';
+import { getNoteName, playElement } from './utils/boardUtils.js';
+import noteValues from './utils/NoteValues.js';
 import State from './State.js';
 
 const context = new AudioContext();
