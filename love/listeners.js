@@ -47,7 +47,6 @@ export const loopPlay = async () => {
   updatePlayStatus();
 }
 
-
 export const submitTimes = (event) => {
   event.preventDefault();
   const timesInput = document.getElementById('loops-select');

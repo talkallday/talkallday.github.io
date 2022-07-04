@@ -1,6 +1,6 @@
 ## Send Love
 
-**Send Love** is a soundboard that will play the chord progression in the chorus of Stevie Wonder's "Love's in Need Of Love Today" and let you can play along.
+**Send Love** is a soundboard that will play the chord progression in the chorus of Stevie Wonder's "Love's in Need Of Love Today" so you can play along.
 
 [You can try it here.](/love)
 
