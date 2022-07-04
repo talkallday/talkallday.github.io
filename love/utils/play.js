@@ -34,7 +34,7 @@ const playRandomNotes = async (chord) => {
     const playColor = document.getElementById('play-color');
     const currentColor = colorNames[style.backgroundColor];
     playColor.style.backgroundColor = currentColor;
-    playColor.innerHTML = `Playing: ` + currentColor.toUpperCase();
+    playColor.innerHTML = `PLAY: ` + currentColor.toUpperCase();
     if (State.synth) {
       let randomNotes = [];
       randomChordKeys.forEach(key => {

@@ -21,7 +21,7 @@ background-color: black;
   text-shadow: 0 0 .5rem black;
   display: inline-block;
   min-height: 3rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: white;
 }
 
@@ -36,7 +36,7 @@ background-color: black;
   text-shadow: 0 0 .5rem black;
   display: inline-block;
   min-height: 3rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: white;
 }
 
@@ -48,13 +48,18 @@ background-color: black;
 
 label {
   min-height: 3rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
+}
+
+select {
+  font-size: 1.75rem;
+  margin-left: .75rem;
 }
 
 kbd {
   display: block;
   min-height: 3rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .board {
