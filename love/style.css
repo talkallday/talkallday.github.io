@@ -32,8 +32,8 @@ background-color: black;
 }
 
 label {
-  min-height: 3rem;
   font-size: 2rem;
+  min-height: 3rem;
 }
 
 select {

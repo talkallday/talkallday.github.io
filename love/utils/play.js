@@ -31,8 +31,8 @@ const playRandomNotes = async (chord) => {
     let randomChordKeys = getRandomKeys(chord, 4);
     let firstKey = randomChordKeys[0];
     let style = getComputedStyle(firstKey);
-    const playColor = document.getElementById('play-color');
     const currentColor = colorNames[style.backgroundColor];
+    const playColor = document.getElementById('play-color');
     playColor.style.backgroundColor = currentColor;
     playColor.innerHTML = `PLAY: ` + currentColor.toUpperCase();
     if (State.synth) {
@@ -50,6 +50,12 @@ const playRandomNotes = async (chord) => {
   chord.style.backgroundColor = 'black';
 }
 
+const setBasePlayColor = () => {
+  const playColor = document.getElementById('play-color');
+  playColor.innerHTML = `Not Playing`;
+  playColor.style.backgroundColor = 'black';
+}
+
 const play = async () => {
   if (State.playing) return;
   State.playing = true;
@@ -60,14 +66,14 @@ const play = async () => {
   const thirdChord = chords[2];
   const fourthChord = chords[3];
   const fifthChord = chords[4];
-  !State.stopped && await playRandomNotes(firstChord);
-  !State.stopped && await playRandomNotes(secondChord);
-  !State.stopped && await playRandomNotes(thirdChord);
-  !State.stopped && await playRandomNotes(thirdChord);
-  !State.stopped && await playRandomNotes(fourthChord);
-  !State.stopped && await playRandomNotes(fourthChord);
-  !State.stopped && await playRandomNotes(fifthChord);
-  !State.stopped && await playRandomNotes(fifthChord);
+  !State.stopped ? await playRandomNotes(firstChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(secondChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(thirdChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(thirdChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(fourthChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(fourthChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(fifthChord) : setBasePlayColor();
+  !State.stopped ? await playRandomNotes(fifthChord) : setBasePlayColor();
   State.playing = false;
 }
 
