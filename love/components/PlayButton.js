@@ -2,7 +2,7 @@ import createElement from "./utils.js";
 
 const PlayButton = (eventPair) => {
   const playButton = createElement({
-    classList: ['press'],
+    classList: ['cell'],
     attributes: [['id', 'play']],
     eventListener: eventPair
 });

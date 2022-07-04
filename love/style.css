@@ -25,21 +25,6 @@ background-color: black;
   color: white;
 }
 
-.press {
-  border: .1rem solid black;
-  border-radius: .15rem;
-  margin: 0.25rem;
-  padding: .25rem .125rem;
-  transition: all .07s ease;
-  width: 15rem;
-  text-align: center;
-  text-shadow: 0 0 .5rem black;
-  display: inline-block;
-  min-height: 3rem;
-  font-size: 2rem;
-  color: white;
-}
-
 .playing {
   transform: scale(1.1);
   border-color: #ffc600;
@@ -54,12 +39,6 @@ label {
 select {
   font-size: 1.75rem;
   margin-left: .75rem;
-}
-
-kbd {
-  display: block;
-  min-height: 3rem;
-  font-size: 2rem;
 }
 
 .board {

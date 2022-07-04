@@ -35,11 +35,9 @@ const Board = (chords = null) => {
     let chordDiv = createElement({classList: ['chord']});
     let chordNotes = getAllNotes(chord);
     chordNotes.forEach((note) => {
-      let noteDiv = createElement({classList: ['press', 'key']});
+      let noteDiv = createElement({classList: ['cell', 'key']});
       noteDiv.addEventListener('pointerdown', playNoteEvent)
-      let kbd = document.createElement('kbd');
-      kbd.textContent = note;
-      noteDiv.appendChild(kbd);
+      noteDiv.textContent = note;
       chordDiv.appendChild(noteDiv);
     })
     board.appendChild(chordDiv);
