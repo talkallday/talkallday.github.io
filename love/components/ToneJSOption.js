@@ -1,4 +1,4 @@
-import createElement from "./utils.js";
+import createElement from '../utils/createElement.js';
 
 const ToneJSOption = (eventPair) => {
   const synthOption = createElement({

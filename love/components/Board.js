@@ -1,4 +1,4 @@
-import createElement from './utils.js';
+import createElement from '../utils/createElement.js';
 import playNoteKey from '../utils/playNoteKey.js';
 import noteValues from '../utils/NoteFrequencies.js';
 
