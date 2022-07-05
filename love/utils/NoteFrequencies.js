@@ -1,4 +1,4 @@
-const noteValues = new Map([
+const noteFrequencies = new Map([
   /*
   ['C0', 16.35],
   ['C#0', 17.32],
@@ -142,4 +142,4 @@ const noteValues = new Map([
    */
 ]);
 
-export default noteValues;
+export default noteFrequencies;
